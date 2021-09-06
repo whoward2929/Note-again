@@ -1,30 +1,22 @@
 const router = require('express').Router();
-const { v4: uuidv4 } = require('uuid')
+const fs = require('fs');
+const util = require('util');
+const readFile = util.promisify(fs.readFile)
+const writeFile = util.promisify(fs.writeFile)
+router.get("/api/notes", async (req, res) => {
+    const notes = await readFile("db/db.json", "utf8");
+    const notesArray = JSON.parse(notes) || []
+    res.json(notesArray);
+})
 
-const { createNewNote, deleteNote } = require('../../lib/notes.js');
-const { notes } = require('../../db/db.json');
-
-
-router.get('/notes', (req, res) => {
-    let results = notes;
-
-    res.json(results);
-});
-
-
-router.post('/notes', (req, res) => {
-    req.body.id = uuidv4();
-
-    const note = createNewNote(req.body, notes);
-
-    res.json(note);
-});
-
-
-router.delete('/notes/:id', (req, res) => {
-    deleteNote(req.params.id, notes);
-
-    res.json(notes);
-});
+router.post("/api/notes", async (req, res) => {
+    const notes = await readFile("db/db.json", "utf8");
+    const notesArray = JSON.parse(notes) || [];
+    console.log(req.body)
+    const newNotes = {title:req.body.title, text:req.body.text, id:2}
+    const newNotesArray = notesArray.concat(newNotes)
+    const finalNotes = writeFile("db/db.json", JSON.stringify(newNotesArray))
+    res.json(finalNotes)
+}) 
 
 module.exports = router;
