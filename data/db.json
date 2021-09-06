@@ -1,9 +1,7 @@
-{
-    "notes": [
-        {
-            "title": "note",
-            "text": "note",
-            "id": "410f3bbc-f58f-4d4b-8c93-f23dfbc040de"
-        }
-    ]
+[
+    {
+        "title":"Hello World",
+        "text":"Hello World",
+        "id":1
     }
+]
